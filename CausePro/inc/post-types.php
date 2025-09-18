@@ -330,3 +330,46 @@ function causepro_save_testimonial_subtitle( $post_id ) {
     }
 }
 add_action( 'save_post', 'causepro_save_testimonial_subtitle' );
+
+/**
+ * Adds a meta box for page subtitle.
+ */
+function causepro_add_page_subtitle_meta_box() {
+    add_meta_box(
+        'causepro_page_subtitle',
+        __( 'Page Subtitle', 'causepro' ),
+        'causepro_render_page_subtitle_meta_box',
+        'page', // Target the 'page' post type
+        'side',
+        'low'
+    );
+}
+add_action( 'add_meta_boxes', 'causepro_add_page_subtitle_meta_box' );
+
+/**
+ * Renders the meta box for page subtitle.
+ */
+function causepro_render_page_subtitle_meta_box( $post ) {
+    wp_nonce_field( 'causepro_save_page_subtitle', 'causepro_page_subtitle_nonce' );
+    $subtitle = get_post_meta( $post->ID, '_page_subtitle', true );
+    echo '<input type="text" id="causepro_page_subtitle" name="causepro_page_subtitle" value="' . esc_attr( $subtitle ) . '" style="width:100%;" placeholder="' . esc_attr__('Enter an optional subtitle.', 'causepro') . '">';
+}
+
+/**
+ * Saves the page subtitle meta box data.
+ */
+function causepro_save_page_subtitle( $post_id ) {
+    if ( ! isset( $_POST['causepro_page_subtitle_nonce'] ) || ! wp_verify_nonce( $_POST['causepro_page_subtitle_nonce'], 'causepro_save_page_subtitle' ) ) {
+        return;
+    }
+    if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+        return;
+    }
+    if ( isset( $_POST['post_type'] ) && 'page' === $_POST['post_type'] && ! current_user_can( 'edit_page', $post_id ) ) {
+        return;
+    }
+    if ( isset( $_POST['causepro_page_subtitle'] ) ) {
+        update_post_meta( $post_id, '_page_subtitle', sanitize_text_field( $_POST['causepro_page_subtitle'] ) );
+    }
+}
+add_action( 'save_post', 'causepro_save_page_subtitle' );
