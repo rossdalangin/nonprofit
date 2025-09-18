@@ -192,7 +192,7 @@ function causepro_generate_dynamic_css() {
 
     // Colors
     $color_selectors = array(
-        'header_bg' => '.site-header',
+        'header_bg' => '.site-header, .main-navigation ul',
         'header_text' => '.site-header, .site-header .site-title a',
         'header_link' => '.site-header a:not(.donate-button)',
         'footer_bg' => '.site-footer',
