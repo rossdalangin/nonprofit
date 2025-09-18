@@ -20,13 +20,24 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     button.addEventListener('click', function() {
-        // Toggle the class on the <ul> element which the CSS uses to show/hide the menu
         menu.classList.toggle('toggled');
+        document.body.classList.toggle('noscroll');
 
-        // Toggle the aria-expanded attribute
         const isExpanded = button.getAttribute('aria-expanded') === 'true';
         button.setAttribute('aria-expanded', !isExpanded);
     });
+
+    // Close the mobile menu on link click
+    const menuLinks = menu.getElementsByTagName('a');
+    for (let i = 0; i < menuLinks.length; i++) {
+        menuLinks[i].addEventListener('click', function() {
+            if (menu.classList.contains('toggled')) {
+                menu.classList.remove('toggled');
+                document.body.classList.remove('noscroll');
+                button.setAttribute('aria-expanded', 'false');
+            }
+        });
+    }
 
     // --- Load More Posts ---
     const loadMoreBtn = document.getElementById('load-more-posts');

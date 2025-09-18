@@ -114,4 +114,22 @@
 		} );
 	} );
 
+	// --- Typography ---
+	const fontSelectors = {
+		'p': 'p, body',
+		'h1': 'h1, .hero-headline',
+		'h2': 'h2, .section-title',
+		'h3': 'h3',
+		'h4': 'h4',
+		'h5': 'h5',
+		'h6': 'h6'
+	};
+	for (const [slug, selector] of Object.entries(fontSelectors)) {
+		wp.customize( `causepro_fontsize_${slug}`, function( value ) {
+			value.bind( function( to ) {
+				$( selector ).css( 'font-size', to + 'rem' );
+			} );
+		} );
+	}
+
 } )( jQuery );

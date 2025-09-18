@@ -181,6 +181,15 @@ function causepro_generate_dynamic_css() {
         $css .= 'body { font-family: ' . esc_attr($body_font) . '; }';
     }
 
+    // Font Sizes
+    $font_size_settings = array('p','h1','h2','h3','h4','h5','h6');
+    foreach($font_size_settings as $slug) {
+        $size = get_theme_mod("causepro_fontsize_{$slug}");
+        if ($size) {
+            $css .= $slug . ' { font-size: ' . esc_attr($size) . 'rem; }';
+        }
+    }
+
     // Colors
     $color_selectors = array(
         'header_bg' => '.site-header',
