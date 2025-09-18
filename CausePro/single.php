@@ -23,9 +23,7 @@ get_header();
 							<?php the_title( '<h1 class="entry-title">', '</h1>' ); ?>
 
 							<div class="entry-meta">
-								<?php
-								// Post meta details like date, author, categories
-								?>
+								<?php causepro_posted_on(); ?>
 							</div><!-- .entry-meta -->
 						</header><!-- .entry-header -->
 
@@ -49,8 +47,10 @@ get_header();
 						</div><!-- .entry-content -->
 
 						<footer class="entry-footer">
+							<?php causepro_entry_footer(); ?>
 							<?php
-							// Post tags, etc.
+							// Social sharing
+							get_template_part( 'template-parts/social-share' );
 							?>
 						</footer><!-- .entry-footer -->
 					</article><!-- #post-<?php the_ID(); ?> -->

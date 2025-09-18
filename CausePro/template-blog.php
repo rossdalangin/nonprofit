@@ -40,6 +40,9 @@ get_header();
                         <div class="masonry-content">
                             <header class="entry-header">
                                 <?php the_title( '<h3 class="entry-title"><a href="' . esc_url( get_permalink() ) . '" rel="bookmark">', '</a></h3>' ); ?>
+                                <div class="entry-meta">
+                                    <?php causepro_posted_on(); ?>
+                                </div><!-- .entry-meta -->
                             </header>
                             <div class="entry-summary">
                                 <?php the_excerpt(); ?>

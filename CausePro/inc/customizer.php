@@ -165,6 +165,37 @@ function causepro_customize_register( $wp_customize ) {
 		) ) );
 	}
 
+	// --- Social Sharing Section ---
+	$wp_customize->add_section( 'causepro_social_sharing_section', array(
+		'title' => __( 'Social Sharing', 'causepro' ),
+		'panel' => 'causepro_theme_options_panel',
+	) );
+	$wp_customize->add_setting( 'causepro_social_twitter_show', array( 'default' => true, 'sanitize_callback' => 'causepro_sanitize_checkbox' ) );
+	$wp_customize->add_control( 'causepro_social_twitter_show', array(
+		'label'   => __( 'Show Twitter Share Button', 'causepro' ),
+		'section' => 'causepro_social_sharing_section',
+		'type'    => 'checkbox',
+	) );
+	$wp_customize->add_setting( 'causepro_social_facebook_show', array( 'default' => true, 'sanitize_callback' => 'causepro_sanitize_checkbox' ) );
+	$wp_customize->add_control( 'causepro_social_facebook_show', array(
+		'label'   => __( 'Show Facebook Share Button', 'causepro' ),
+		'section' => 'causepro_social_sharing_section',
+		'type'    => 'checkbox',
+	) );
+	$wp_customize->add_setting( 'causepro_social_linkedin_show', array( 'default' => true, 'sanitize_callback' => 'causepro_sanitize_checkbox' ) );
+	$wp_customize->add_control( 'causepro_social_linkedin_show', array(
+		'label'   => __( 'Show LinkedIn Share Button', 'causepro' ),
+		'section' => 'causepro_social_sharing_section',
+		'type'    => 'checkbox',
+	) );
+	$wp_customize->add_setting( 'causepro_social_twitter_handle', array( 'default' => '', 'sanitize_callback' => 'sanitize_text_field' ) );
+	$wp_customize->add_control( 'causepro_social_twitter_handle', array(
+		'label'       => __( 'Twitter Handle', 'causepro' ),
+		'description' => __( 'Enter your Twitter handle without the "@" symbol.', 'causepro' ),
+		'section'     => 'causepro_social_sharing_section',
+		'type'        => 'text',
+	) );
+
 
 	// --- Homepage Sections Panel ---
 	$wp_customize->add_panel( 'causepro_homepage_panel', array(
