@@ -25,7 +25,8 @@ if ($bg_type === 'color') {
     }
 }
 
-$args = array(
+// First, try to get upcoming events
+$args_upcoming = array(
 	'post_type'      => 'event',
 	'posts_per_page' => absint( $count ),
 	'meta_key'       => '_event_date_time',
@@ -40,7 +41,28 @@ $args = array(
 		),
 	),
 );
-$events_query = new WP_Query( $args );
+$events_query = new WP_Query( $args_upcoming );
+
+// If no upcoming events, get past events as a fallback
+if ( ! $events_query->have_posts() ) {
+    $headline = __( 'Past Events', 'causepro' ); // Change headline for context
+    $args_past = array(
+        'post_type'      => 'event',
+        'posts_per_page' => absint( $count ),
+        'meta_key'       => '_event_date_time',
+        'orderby'        => 'meta_value',
+        'order'          => 'DESC', // Show most recent past events
+        'meta_query'     => array(
+            array(
+                'key'     => '_event_date_time',
+                'value'   => date( 'Y-m-d H:i' ),
+                'compare' => '<',
+                'type'    => 'DATETIME',
+            ),
+        ),
+    );
+    $events_query = new WP_Query( $args_past );
+}
 ?>
 
 <?php if ( $events_query->have_posts() ) : ?>
