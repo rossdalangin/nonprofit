@@ -118,11 +118,11 @@ function causepro_customize_register( $wp_customize ) {
 	// Font Size Controls
 	$font_size_settings = array(
 		'p'  => array( 'label' => __( 'Paragraph Font Size (rem)', 'causepro' ), 'default' => 1 ),
-		'h1' => array( 'label' => __( 'H1 Font Size (rem)', 'causepro' ), 'default' => 2.8 ),
-		'h2' => array( 'label' => __( 'H2 Font Size (rem)', 'causepro' ), 'default' => 2.5 ),
-		'h3' => array( 'label' => __( 'H3 Font Size (rem)', 'causepro' ), 'default' => 1.8 ),
-		'h4' => array( 'label' => __( 'H4 Font Size (rem)', 'causepro' ), 'default' => 1.5 ),
-		'h5' => array( 'label' => __( 'H5 Font Size (rem)', 'causepro' ), 'default' => 1.2 ),
+		'h1' => array( 'label' => __( 'H1 Font Size (rem)', 'causepro' ), 'default' => 3.05 ),
+		'h2' => array( 'label' => __( 'H2 Font Size (rem)', 'causepro' ), 'default' => 2.44 ),
+		'h3' => array( 'label' => __( 'H3 Font Size (rem)', 'causepro' ), 'default' => 1.95 ),
+		'h4' => array( 'label' => __( 'H4 Font Size (rem)', 'causepro' ), 'default' => 1.56 ),
+		'h5' => array( 'label' => __( 'H5 Font Size (rem)', 'causepro' ), 'default' => 1.25 ),
 		'h6' => array( 'label' => __( 'H6 Font Size (rem)', 'causepro' ), 'default' => 1 ),
 	);
 
