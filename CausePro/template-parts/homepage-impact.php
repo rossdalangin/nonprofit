@@ -37,7 +37,7 @@ if ($bg_type === 'color') {
 				$label  = get_theme_mod( "causepro_impact_stat_{$i}_label", "People Helped" );
 				$icon   = get_theme_mod( "causepro_impact_stat_{$i}_icon", "dashicons-groups" );
 				?>
-				<div id="impact-stat-<?php echo $i; ?>" class="impact-stat">
+				<div id="impact-stat-<?php echo $i; ?>" class="impact-stat-item">
 					<?php if ( ! empty( $icon ) ) : ?>
 						<div class="stat-icon-wrapper">
 							<span class="stat-icon dashicons-before <?php echo esc_attr( $icon ); ?>"></span>

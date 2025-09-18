@@ -201,6 +201,19 @@ body.home .homepage-section[style*="background-image"] {
 .hero-headline { font-size: 3.8rem; }
 
 /* Impact Section */
+.impact-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 50px 80px; /* row-gap column-gap */
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+}
+.impact-stat-item { padding: 20px; }
+.stat-icon-wrapper .stat-icon {
+    font-size: 48px;
+    color: var(--primary-accent-color);
+}
 .stat-number { font-size: 2.5rem; }
 .stat-label { font-size: 1.1rem; }
 
@@ -213,11 +226,95 @@ body.home .homepage-section[style*="background-image"] {
 .blog-item .entry-header, .blog-item .entry-summary, .blog-item .entry-footer { padding: 30px; }
 .cause-item .entry-title, .blog-item .entry-title { font-size: 1.5rem; }
 
+/* Campaign Section */
+.campaign-content { max-width: 700px; margin: 0 auto; text-align: center; }
+.progress-bar-wrapper {
+    background: var(--border-color);
+    border-radius: 30px;
+    height: 30px;
+    margin: 30px 0 10px;
+    overflow: hidden;
+    border: 1px solid #ccc;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+}
+.progress-bar-inner {
+    background: var(--primary-accent-color);
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--white);
+    font-weight: bold;
+    border-radius: 30px;
+    transition: width 0.5s ease-in-out;
+}
+.progress-bar-labels { display: flex; justify-content: space-between; font-size: 0.9rem; padding: 0 5px; }
+.campaign-button { margin-top: 30px; padding: 14px 28px; font-size: 1.1rem; }
+
 /* --- Single Post Layout --- */
 .single .container, .page .container:not(.professional-page-header .container) { display: flex; gap: 5%; align-items: flex-start; }
 .single .main-content-area, .page .main-content-area { flex: 1; min-width: 0; }
 .single.has-sidebar .main-content-area, .page.has-sidebar .main-content-area { flex-basis: 70%; }
 .single #secondary.widget-area, .page #secondary.widget-area { flex-basis: 25%; }
+
+/* --- Testimonials Section --- */
+.testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 40px;
+}
+.testimonial-item {
+    background: var(--background-light);
+    padding: 35px;
+    border-radius: var(--border-radius);
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    border: 1px solid var(--border-color);
+}
+.testimonial-item .author-image {
+    margin: 0 auto 20px;
+}
+.author-image img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 4px solid var(--white);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+.testimonial-content {
+    font-style: italic;
+    flex-grow: 1;
+    font-size: 1.1rem;
+    color: var(--text-light);
+    margin-bottom: 20px;
+    position: relative;
+}
+.testimonial-content::before {
+    content: '\\201C';
+    display: block;
+    font-size: 4rem;
+    color: var(--primary-accent-color);
+    line-height: 1;
+    margin-bottom: 15px;
+}
+.testimonial-author {
+    margin-top: auto;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color);
+}
+.author-name {
+    font-weight: bold;
+    font-size: 1.2rem;
+    color: var(--text-color);
+    margin: 0;
+}
+.author-subtitle {
+    font-size: 0.9rem;
+    color: var(--text-light);
+    margin: 0;
+}
+
 
 /* --- Professional Page Template --- */
 .professional-page-header { background-color: var(--background-light); padding: 80px 24px; margin-bottom: 60px; text-align: center; }
@@ -245,6 +342,7 @@ body.home .homepage-section[style*="background-image"] {
 
     .single .container, .page .container:not(.professional-page-header .container) { flex-direction: column; }
     .masonry-grid { column-count: 1; }
+    .impact-stats-grid { grid-template-columns: 1fr; }
 
     .homepage-section { padding: 60px 0; }
     .section-title { font-size: 2.2rem; margin-bottom: 40px; }
