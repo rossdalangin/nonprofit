@@ -7,6 +7,7 @@
 
 // Get section settings
 $headline = get_theme_mod( 'causepro_hero_headline', __( 'Your Support Changes Lives. See How.', 'causepro' ) );
+$subtitle = get_theme_mod( 'causepro_hero_subtitle', __( 'Join our community of donors and make a real impact. Every contribution, big or small, helps us create positive change.', 'causepro' ) );
 $button_text = get_theme_mod( 'causepro_hero_button_text', __( 'Donate Now', 'causepro' ) );
 $button_link = get_theme_mod( 'causepro_donation_link', '#' );
 
@@ -32,6 +33,9 @@ if ($bg_type === 'color') {
 	<div class="container">
 		<div class="hero-content">
 			<h1 class="hero-headline"><?php echo esc_html( $headline ); ?></h1>
+			<?php if ( ! empty( $subtitle ) ) : ?>
+				<p class="hero-subtitle"><?php echo esc_html( $subtitle ); ?></p>
+			<?php endif; ?>
 			<?php if ( ! empty( $button_text ) && ! empty( $button_link ) ) : ?>
 				<a href="<?php echo esc_url( $button_link ); ?>" class="button hero-button">
 					<?php echo esc_html( $button_text ); ?>
