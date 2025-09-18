@@ -13,16 +13,29 @@ get_header();
 <main id="primary" class="site-main">
 
 	<?php
-	// Get the order from the Customizer
-	$sections_order_str = get_theme_mod( 'causepro_homepage_sections_order', 'hero,impact,causes,campaign,events' );
-	$sections_order = explode( ',', $sections_order_str );
+	// Define all possible sections
+	$possible_sections = array( 'hero', 'impact', 'causes', 'campaign', 'testimonials', 'blog', 'events' );
 
-	// Loop through the sections and load the template parts
-	foreach ( $sections_order as $section ) {
-		$section_slug = trim( $section );
-		if ( ! empty( $section_slug ) ) {
-			get_template_part( 'template-parts/homepage', $section_slug );
+	$sections_to_display = array();
+
+	// Check which sections are enabled and get their order
+	foreach ( $possible_sections as $section_slug ) {
+		if ( get_theme_mod( 'causepro_' . $section_slug . '_show', true ) ) {
+			$sections_to_display[] = array(
+				'slug'  => $section_slug,
+				'order' => get_theme_mod( 'causepro_' . $section_slug . '_order', 10 ),
+			);
 		}
+	}
+
+	// Sort the sections based on their order
+	usort( $sections_to_display, function( $a, $b ) {
+		return $a['order'] - $b['order'];
+	} );
+
+	// Loop through the sorted sections and load the template parts
+	foreach ( $sections_to_display as $section ) {
+		get_template_part( 'template-parts/homepage', $section['slug'] );
 	}
 	?>
 

@@ -1,51 +1,51 @@
 <?php
 /**
- * Template part for displaying the Causes section on the homepage.
+ * Template part for displaying the Blog section on the homepage.
  *
  * @package CausePro
  */
 
-// Get section settings
-$headline = get_theme_mod( 'causepro_causes_headline', __( 'Join a Cause', 'causepro' ) );
-$count = get_theme_mod( 'causepro_causes_count', 3 );
+$headline = get_theme_mod( 'causepro_blog_headline', __( 'From Our Blog', 'causepro' ) );
+$count = get_theme_mod( 'causepro_blog_count', 3 );
 
 // Generate background styles
 $bg_style = '';
-$bg_type = get_theme_mod( 'causepro_causes_bg_type', 'none' );
+$bg_type = get_theme_mod( 'causepro_blog_bg_type', 'none' );
 if ($bg_type === 'color') {
-    $bg_style = 'style="background-color: ' . esc_attr(get_theme_mod('causepro_causes_bg_color')) . ';"';
+    $bg_style = 'style="background-color: ' . esc_attr(get_theme_mod('causepro_blog_bg_color')) . ';"';
 } elseif ($bg_type === 'gradient') {
-    $grad1 = esc_attr(get_theme_mod('causepro_causes_bg_gradient_1'));
-    $grad2 = esc_attr(get_theme_mod('causepro_causes_bg_gradient_2'));
+    $grad1 = esc_attr(get_theme_mod('causepro_blog_bg_gradient_1'));
+    $grad2 = esc_attr(get_theme_mod('causepro_blog_bg_gradient_2'));
     $bg_style = 'style="background-image: linear-gradient(to right, ' . $grad1 . ', ' . $grad2 . ');"';
 } elseif ($bg_type === 'image') {
-    $bg_image_url = get_theme_mod('causepro_causes_bg_image');
+    $bg_image_url = get_theme_mod('causepro_blog_bg_image');
     if (!empty($bg_image_url)) {
         $bg_style = 'style="background-image: url(' . esc_url($bg_image_url) . ');"';
     }
 }
 
 $args = array(
-	'post_type'      => 'cause',
+	'post_type'      => 'post',
 	'posts_per_page' => absint( $count ),
 	'orderby'        => 'date',
 	'order'          => 'DESC',
+    'ignore_sticky_posts' => 1,
 );
-$causes_query = new WP_Query( $args );
+$blog_query = new WP_Query( $args );
 ?>
 
-<?php if ( $causes_query->have_posts() ) : ?>
-<section id="causes-section" class="homepage-section causes-section" <?php echo $bg_style; ?>>
+<?php if ( $blog_query->have_posts() ) : ?>
+<section id="blog-section" class="homepage-section blog-section" <?php echo $bg_style; ?>>
 	<div class="container">
 		<?php if ( ! empty( $headline ) ) : ?>
 			<h2 class="section-title"><?php echo esc_html( $headline ); ?></h2>
 		<?php endif; ?>
 
-		<div class="causes-grid">
-			<?php while ( $causes_query->have_posts() ) : $causes_query->the_post(); ?>
-				<article id="post-<?php the_ID(); ?>" <?php post_class('cause-item'); ?>>
+		<div class="blog-grid">
+			<?php while ( $blog_query->have_posts() ) : $blog_query->the_post(); ?>
+				<article id="post-<?php the_ID(); ?>" <?php post_class('blog-item'); ?>>
 					<?php if ( has_post_thumbnail() ) : ?>
-						<div class="cause-thumbnail">
+						<div class="blog-thumbnail">
 							<a href="<?php the_permalink(); ?>">
 								<?php the_post_thumbnail( 'medium_large' ); ?>
 							</a>
@@ -58,7 +58,7 @@ $causes_query = new WP_Query( $args );
 						<?php the_excerpt(); ?>
 					</div>
                     <footer class="entry-footer">
-                        <a href="<?php the_permalink(); ?>" class="button"><?php esc_html_e( 'Learn More', 'causepro' ); ?></a>
+                        <a href="<?php the_permalink(); ?>" class="button"><?php esc_html_e( 'Read More', 'causepro' ); ?></a>
                     </footer>
 				</article>
 			<?php endwhile; ?>

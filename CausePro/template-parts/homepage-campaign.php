@@ -5,12 +5,29 @@
  * @package CausePro
  */
 
+// Get section settings
 $headline    = get_theme_mod( 'causepro_campaign_headline', __( 'Featured Campaign', 'causepro' ) );
 $text        = get_theme_mod( 'causepro_campaign_text', __( 'Help us reach our goal to build a new community center. Every contribution makes a difference!', 'causepro' ) );
 $goal        = get_theme_mod( 'causepro_campaign_goal', 50000 );
 $raised      = get_theme_mod( 'causepro_campaign_raised', 21000 );
 $button_text = get_theme_mod( 'causepro_campaign_button_text', __( 'Contribute to Campaign', 'causepro' ) );
 $button_link = get_theme_mod( 'causepro_campaign_button_link', '#' );
+
+// Generate background styles
+$bg_style = '';
+$bg_type = get_theme_mod( 'causepro_campaign_bg_type', 'color' );
+if ($bg_type === 'color') {
+    $bg_style = 'style="background-color: ' . esc_attr(get_theme_mod('causepro_campaign_bg_color')) . ';"';
+} elseif ($bg_type === 'gradient') {
+    $grad1 = esc_attr(get_theme_mod('causepro_campaign_bg_gradient_1'));
+    $grad2 = esc_attr(get_theme_mod('causepro_campaign_bg_gradient_2'));
+    $bg_style = 'style="background-image: linear-gradient(to right, ' . $grad1 . ', ' . $grad2 . ');"';
+} elseif ($bg_type === 'image') {
+    $bg_image_url = get_theme_mod('causepro_campaign_bg_image');
+    if (!empty($bg_image_url)) {
+        $bg_style = 'style="background-image: url(' . esc_url($bg_image_url) . ');"';
+    }
+}
 
 $percentage = 0;
 if ( $goal > 0 ) {
@@ -20,7 +37,7 @@ $percentage = min( $percentage, 100 ); // Cap at 100%
 
 ?>
 
-<section id="campaign-section" class="homepage-section campaign-section">
+<section id="campaign-section" class="homepage-section campaign-section" <?php echo $bg_style; ?>>
 	<div class="container">
 		<?php if ( ! empty( $headline ) ) : ?>
 			<h2 class="section-title"><?php echo esc_html( $headline ); ?></h2>

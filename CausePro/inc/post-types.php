@@ -246,3 +246,87 @@ function causepro_save_event_details( $post_id ) {
 	}
 }
 add_action( 'save_post', 'causepro_save_event_details' );
+
+/**
+ * Register Testimonial CPT
+ */
+function causepro_register_testimonial_cpt() {
+    $labels = array(
+        'name'                  => _x( 'Testimonials', 'Post Type General Name', 'causepro' ),
+        'singular_name'         => _x( 'Testimonial', 'Post Type Singular Name', 'causepro' ),
+        'menu_name'             => __( 'Testimonials', 'causepro' ),
+        'name_admin_bar'        => __( 'Testimonial', 'causepro' ),
+		'all_items'             => __( 'All Testimonials', 'causepro' ),
+		'add_new_item'          => __( 'Add New Testimonial', 'causepro' ),
+		'add_new'               => __( 'Add New', 'causepro' ),
+		'new_item'              => __( 'New Testimonial', 'causepro' ),
+		'edit_item'             => __( 'Edit Testimonial', 'causepro' ),
+		'update_item'           => __( 'Update Testimonial', 'causepro' ),
+		'view_item'             => __( 'View Testimonial', 'causepro' ),
+    );
+    $args = array(
+        'label'                 => __( 'Testimonial', 'causepro' ),
+        'description'           => __( 'Post Type for Testimonials', 'causepro' ),
+        'labels'                => $labels,
+        'supports'              => array( 'title', 'editor', 'thumbnail' ),
+        'hierarchical'          => false,
+        'public'                => false,
+        'show_ui'               => true,
+        'show_in_menu'          => true,
+        'menu_position'         => 7,
+        'menu_icon'             => 'dashicons-format-quote',
+        'show_in_admin_bar'     => true,
+        'show_in_nav_menus'     => false,
+        'can_export'            => true,
+        'has_archive'           => false,
+        'exclude_from_search'   => true,
+        'publicly_queryable'    => false,
+        'capability_type'       => 'post',
+        'show_in_rest'          => true,
+    );
+    register_post_type( 'testimonial', $args );
+}
+add_action( 'init', 'causepro_register_testimonial_cpt', 0 );
+
+/**
+ * Adds a meta box for testimonial subtitle.
+ */
+function causepro_add_testimonial_subtitle_meta_box() {
+    add_meta_box(
+        'causepro_testimonial_subtitle',
+        __( 'Author Subtitle', 'causepro' ),
+        'causepro_render_testimonial_subtitle_meta_box',
+        'testimonial',
+        'side',
+        'low'
+    );
+}
+add_action( 'add_meta_boxes', 'causepro_add_testimonial_subtitle_meta_box' );
+
+/**
+ * Renders the meta box.
+ */
+function causepro_render_testimonial_subtitle_meta_box( $post ) {
+    wp_nonce_field( 'causepro_save_testimonial_subtitle', 'causepro_testimonial_subtitle_nonce' );
+    $subtitle = get_post_meta( $post->ID, '_testimonial_subtitle', true );
+    echo '<input type="text" id="causepro_testimonial_subtitle" name="causepro_testimonial_subtitle" value="' . esc_attr( $subtitle ) . '" style="width:100%;" placeholder="' . esc_attr__('e.g. CEO, Example Inc.', 'causepro') . '">';
+}
+
+/**
+ * Saves the meta box data.
+ */
+function causepro_save_testimonial_subtitle( $post_id ) {
+    if ( ! isset( $_POST['causepro_testimonial_subtitle_nonce'] ) || ! wp_verify_nonce( $_POST['causepro_testimonial_subtitle_nonce'], 'causepro_save_testimonial_subtitle' ) ) {
+        return;
+    }
+    if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+        return;
+    }
+    if ( isset( $_POST['post_type'] ) && 'testimonial' === $_POST['post_type'] && ! current_user_can( 'edit_post', $post_id ) ) {
+        return;
+    }
+    if ( isset( $_POST['causepro_testimonial_subtitle'] ) ) {
+        update_post_meta( $post_id, '_testimonial_subtitle', sanitize_text_field( $_POST['causepro_testimonial_subtitle'] ) );
+    }
+}
+add_action( 'save_post', 'causepro_save_testimonial_subtitle' );

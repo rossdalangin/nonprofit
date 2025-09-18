@@ -5,19 +5,29 @@
  * @package CausePro
  */
 
+// Get section settings
 $headline = get_theme_mod( 'causepro_hero_headline', __( 'Your Support Changes Lives. See How.', 'causepro' ) );
 $button_text = get_theme_mod( 'causepro_hero_button_text', __( 'Donate Now', 'causepro' ) );
 $button_link = get_theme_mod( 'causepro_donation_link', '#' );
-$bg_image_url = get_theme_mod( 'causepro_hero_bg_image', '' );
 
-$style = '';
-if ( ! empty( $bg_image_url ) ) {
-	$style = 'style="background-image: url(' . esc_url( $bg_image_url ) . ');"';
+// Generate background styles
+$bg_style = '';
+$bg_type = get_theme_mod( 'causepro_hero_bg_type', 'image' ); // Default to image for hero
+if ($bg_type === 'color') {
+    $bg_style = 'style="background-color: ' . esc_attr(get_theme_mod('causepro_hero_bg_color')) . ';"';
+} elseif ($bg_type === 'gradient') {
+    $grad1 = esc_attr(get_theme_mod('causepro_hero_bg_gradient_1'));
+    $grad2 = esc_attr(get_theme_mod('causepro_hero_bg_gradient_2'));
+    $bg_style = 'style="background-image: linear-gradient(to right, ' . $grad1 . ', ' . $grad2 . ');"';
+} elseif ($bg_type === 'image') {
+    $bg_image_url = get_theme_mod('causepro_hero_bg_image');
+    if (!empty($bg_image_url)) {
+        $bg_style = 'style="background-image: url(' . esc_url($bg_image_url) . ');"';
+    }
 }
-
 ?>
 
-<section id="hero-section" class="homepage-section hero-section" <?php echo $style; ?>>
+<section id="hero-section" class="homepage-section hero-section" <?php echo $bg_style; ?>>
 	<div class="section-overlay"></div>
 	<div class="container">
 		<div class="hero-content">

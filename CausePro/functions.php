@@ -155,13 +155,72 @@ function causepro_widgets_init() {
 			'after_title'   => '</h2>',
 		)
 	);
+	register_sidebar(
+		array(
+			'name'          => esc_html__( 'Blog Sidebar', 'causepro' ),
+			'id'            => 'sidebar-1',
+			'description'   => esc_html__( 'Add widgets here to appear in your blog sidebar.', 'causepro' ),
+			'before_widget' => '<section id="%1$s" class="widget %2$s">',
+			'after_widget'  => '</section>',
+			'before_title'  => '<h2 class="widget-title">',
+			'after_title'   => '</h2>',
+		)
+	);
 }
 add_action( 'widgets_init', 'causepro_widgets_init' );
 
 /**
  * Enqueue scripts and styles.
  */
+function causepro_generate_dynamic_css() {
+    $css = '';
+
+    // Body Font
+    $body_font = get_theme_mod('causepro_body_font', 'default');
+    if ($body_font !== 'default') {
+        $css .= 'body { font-family: ' . esc_attr($body_font) . '; }';
+    }
+
+    // Colors
+    $color_selectors = array(
+        'header_bg' => '.site-header',
+        'header_text' => '.site-header, .site-header .site-title a',
+        'header_link' => '.site-header a:not(.donate-button)',
+        'footer_bg' => '.site-footer',
+        'footer_text' => '.site-footer, .site-footer .widget-title',
+        'footer_link' => '.site-footer a',
+        'body_text' => 'body, p',
+        'headings_text' => 'h1, h2, h3, h4, h5, h6, .entry-title a',
+        'link_color' => 'a',
+        'link_hover_color' => 'a:hover',
+    );
+
+    foreach($color_selectors as $slug => $selector) {
+        $color = get_theme_mod("causepro_color_{$slug}");
+        $property = (strpos($slug, 'bg') !== false) ? 'background-color' : 'color';
+        if ($color) {
+            $css .= $selector . ' { ' . $property . ': ' . esc_attr($color) . '; }';
+        }
+    }
+
+    if (!empty($css)) {
+        echo '<style type="text/css">' . $css . '</style>';
+    }
+}
+add_action('wp_head', 'causepro_generate_dynamic_css');
+
+/**
+ * Enqueue scripts and styles.
+ */
 function causepro_scripts() {
+	// Google Fonts
+	$body_font = get_theme_mod('causepro_body_font', 'default');
+	$google_fonts = array('Lato', 'Montserrat', 'Open Sans', 'Roboto', 'Merriweather', 'Playfair Display');
+	if (in_array($body_font, $google_fonts)) {
+		$font_url = 'https://fonts.googleapis.com/css?family=' . urlencode($body_font) . ':400,700';
+		wp_enqueue_style('causepro-google-font', $font_url);
+	}
+
 	// Main theme stylesheet
 	wp_enqueue_style( 'causepro-style', get_stylesheet_uri(), array(), CAUSEPRO_VERSION );
 
@@ -191,3 +250,75 @@ require get_template_directory() . '/inc/post-types.php';
  * Customizer additions.
  */
 require get_template_directory() . '/inc/customizer.php';
+
+/**
+ * AJAX handler for loading more posts.
+ */
+function causepro_load_more_posts() {
+    check_ajax_referer('causepro_load_more_nonce', 'nonce');
+
+    $paged = $_POST['page'] + 1;
+    $args = array(
+        'post_type'      => 'post',
+        'posts_per_page' => 9,
+        'paged'          => $paged,
+    );
+    $blog_query = new WP_Query( $args );
+
+    if ( $blog_query->have_posts() ) :
+        while ( $blog_query->have_posts() ) : $blog_query->the_post(); ?>
+            <article id="post-<?php the_ID(); ?>" <?php post_class('masonry-item'); ?>>
+                <?php if ( has_post_thumbnail() ) : ?>
+                    <div class="post-thumbnail">
+                        <a href="<?php the_permalink(); ?>">
+                            <?php the_post_thumbnail( 'medium_large' ); ?>
+                        </a>
+                    </div>
+                <?php endif; ?>
+                <div class="masonry-content">
+                    <header class="entry-header">
+                        <?php the_title( '<h3 class="entry-title"><a href="' . esc_url( get_permalink() ) . '" rel="bookmark">', '</a></h3>' ); ?>
+                    </header>
+                    <div class="entry-summary">
+                        <?php the_excerpt(); ?>
+                    </div>
+                </div>
+            </article>
+        <?php endwhile;
+    endif;
+    wp_reset_postdata();
+    die();
+}
+add_action('wp_ajax_load_more_posts', 'causepro_load_more_posts');
+add_action('wp_ajax_nopriv_load_more_posts', 'causepro_load_more_posts');
+
+/**
+ * Localize script data.
+ */
+function causepro_localize_script_data( $handle ) {
+    if ( 'causepro-main-js' === $handle ) {
+        wp_localize_script($handle, 'causepro_ajax', array(
+            'ajax_url' => admin_url('admin-ajax.php'),
+            'nonce'    => wp_create_nonce('causepro_load_more_nonce'),
+        ));
+    }
+}
+add_action( 'wp_enqueue_scripts', 'causepro_localize_script_data', 20 );
+
+/**
+ * Adds custom classes to the array of body classes.
+ */
+function causepro_body_classes( $classes ) {
+	// Adds a class of hfeed to non-singular pages.
+	if ( ! is_singular() ) {
+		$classes[] = 'hfeed';
+	}
+
+	// Adds a class of no-sidebar when there is no sidebar present.
+	if ( ! is_active_sidebar( 'sidebar-1' ) ) {
+		$classes[] = 'no-sidebar';
+	}
+
+	return $classes;
+}
+add_filter( 'body_class', 'causepro_body_classes' );

@@ -5,8 +5,25 @@
  * @package CausePro
  */
 
+// Get section settings
 $headline = get_theme_mod( 'causepro_events_headline', __( 'Upcoming Events', 'causepro' ) );
 $count = get_theme_mod( 'causepro_events_count', 3 );
+
+// Generate background styles
+$bg_style = '';
+$bg_type = get_theme_mod( 'causepro_events_bg_type', 'none' );
+if ($bg_type === 'color') {
+    $bg_style = 'style="background-color: ' . esc_attr(get_theme_mod('causepro_events_bg_color')) . ';"';
+} elseif ($bg_type === 'gradient') {
+    $grad1 = esc_attr(get_theme_mod('causepro_events_bg_gradient_1'));
+    $grad2 = esc_attr(get_theme_mod('causepro_events_bg_gradient_2'));
+    $bg_style = 'style="background-image: linear-gradient(to right, ' . $grad1 . ', ' . $grad2 . ');"';
+} elseif ($bg_type === 'image') {
+    $bg_image_url = get_theme_mod('causepro_events_bg_image');
+    if (!empty($bg_image_url)) {
+        $bg_style = 'style="background-image: url(' . esc_url($bg_image_url) . ');"';
+    }
+}
 
 $args = array(
 	'post_type'      => 'event',
@@ -27,7 +44,7 @@ $events_query = new WP_Query( $args );
 ?>
 
 <?php if ( $events_query->have_posts() ) : ?>
-<section id="events-section" class="homepage-section events-section">
+<section id="events-section" class="homepage-section events-section" <?php echo $bg_style; ?>>
 	<div class="container">
 		<?php if ( ! empty( $headline ) ) : ?>
 			<h2 class="section-title"><?php echo esc_html( $headline ); ?></h2>
