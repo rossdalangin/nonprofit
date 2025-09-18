@@ -74,29 +74,36 @@ get_header();
         <?php if ( $events_query->have_posts() ) : ?>
             <div class="events-list events-archive-list">
                 <?php while ( $events_query->have_posts() ) : $events_query->the_post(); ?>
-                    <article id="post-<?php the_ID(); ?>" <?php post_class('event-item-archive'); ?>>
-                        <div class="event-item-content">
+                    <article id="post-<?php the_ID(); ?>" <?php post_class('event-card'); ?>>
+                        <?php
+                        $event_date_time = get_post_meta( get_the_ID(), '_event_date_time', true );
+                        if ( ! empty( $event_date_time ) ) :
+                            $date = new DateTime( $event_date_time );
+                        ?>
+                        <div class="event-date-box">
+                            <span class="event-month"><?php echo esc_html( $date->format( 'M' ) ); ?></span>
+                            <span class="event-day"><?php echo esc_html( $date->format( 'd' ) ); ?></span>
+                        </div>
+                        <?php endif; ?>
+
+                        <div class="event-card-content">
                             <header class="entry-header">
                                 <?php the_title( '<h2 class="entry-title"><a href="' . esc_url( get_permalink() ) . '" rel="bookmark">', '</a></h2>' ); ?>
-                                <?php
-                                $event_date_time = get_post_meta( get_the_ID(), '_event_date_time', true );
-                                if ( ! empty( $event_date_time ) ) {
-                                    $date = new DateTime( $event_date_time );
-                                    echo '<p class="event-date">' . esc_html( $date->format( 'F j, Y \a\t g:i a' ) ) . '</p>';
-                                }
-                                ?>
+                                <div class="event-meta">
+                                    <?php if ( ! empty( $event_date_time ) ) : ?>
+                                        <span class="event-time"><?php echo esc_html( $date->format( 'g:i a' ) ); ?></span>
+                                    <?php endif; ?>
+                                    <?php
+                                    $location = get_post_meta( get_the_ID(), '_event_location', true );
+                                    if ( ! empty( $location ) ) : ?>
+                                        <span class="event-location"><?php echo esc_html( $location ); ?></span>
+                                    <?php endif; ?>
+                                </div>
                             </header>
                             <div class="entry-summary">
                                 <?php the_excerpt(); ?>
                             </div>
                         </div>
-                        <?php if ( has_post_thumbnail() ) : ?>
-                            <div class="event-thumbnail">
-                                <a href="<?php the_permalink(); ?>">
-                                    <?php the_post_thumbnail( 'thumbnail' ); ?>
-                                </a>
-                            </div>
-                        <?php endif; ?>
                     </article>
                 <?php endwhile; ?>
             </div>
