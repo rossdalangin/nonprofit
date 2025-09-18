@@ -366,3 +366,47 @@ function causepro_customize_preview_js() {
 	wp_enqueue_script( 'causepro-customizer', get_template_directory_uri() . '/assets/js/customizer.js', array( 'customize-preview' ), CAUSEPRO_VERSION, true );
 }
 add_action( 'customize_preview_init', 'causepro_customize_preview_js' );
+
+// --- Contact Page Panel ---
+$wp_customize->add_panel( 'causepro_contact_page_panel', array(
+    'title'       => __( 'Contact Page Options', 'causepro' ),
+    'priority'    => 30,
+) );
+
+// Contact Details Section
+$wp_customize->add_section( 'causepro_contact_details_section', array(
+    'title'       => __( 'Contact Details', 'causepro' ),
+    'panel'       => 'causepro_contact_page_panel',
+) );
+$wp_customize->add_setting( 'causepro_contact_address', array( 'default' => '', 'sanitize_callback' => 'sanitize_text_field' ) );
+$wp_customize->add_control( 'causepro_contact_address', array( 'label' => __( 'Address', 'causepro' ), 'section' => 'causepro_contact_details_section', 'type' => 'text' ) );
+$wp_customize->add_setting( 'causepro_contact_phone', array( 'default' => '', 'sanitize_callback' => 'sanitize_text_field' ) );
+$wp_customize->add_control( 'causepro_contact_phone', array( 'label' => __( 'Phone Number', 'causepro' ), 'section' => 'causepro_contact_details_section', 'type' => 'text' ) );
+$wp_customize->add_setting( 'causepro_contact_email', array( 'default' => '', 'sanitize_callback' => 'sanitize_email' ) );
+$wp_customize->add_control( 'causepro_contact_email', array( 'label' => __( 'Email Address', 'causepro' ), 'section' => 'causepro_contact_details_section', 'type' => 'email' ) );
+
+// Contact Form Section
+$wp_customize->add_section( 'causepro_contact_form_section', array(
+    'title'       => __( 'Contact Form', 'causepro' ),
+    'panel'       => 'causepro_contact_page_panel',
+) );
+$wp_customize->add_setting( 'causepro_contact_form', array( 'default' => '', 'sanitize_callback' => 'wp_kses_post' ) );
+$wp_customize->add_control( 'causepro_contact_form', array(
+    'label'       => __( 'Form Shortcode/HTML', 'causepro' ),
+    'description' => __( 'Enter a contact form shortcode (e.g., from Contact Form 7) or paste your own form HTML.', 'causepro' ),
+    'section'     => 'causepro_contact_form_section',
+    'type'        => 'textarea',
+) );
+
+// Map Section
+$wp_customize->add_section( 'causepro_map_section', array(
+    'title'       => __( 'Map Settings', 'causepro' ),
+    'panel'       => 'causepro_contact_page_panel',
+) );
+$wp_customize->add_setting( 'causepro_contact_map_url', array( 'default' => '', 'sanitize_callback' => 'esc_url_raw' ) );
+$wp_customize->add_control( 'causepro_contact_map_url', array(
+    'label'       => __( 'Google Maps Embed URL', 'causepro' ),
+    'description' => __( 'Go to Google Maps, find your location, click "Share", then "Embed a map", and copy the SRC URL from the iframe code.', 'causepro' ),
+    'section'     => 'causepro_map_section',
+    'type'        => 'url',
+) );

@@ -181,6 +181,9 @@ input[type="submit"]:hover {
 .site-info a { color: #bdc3c7; }
 
 /* --- General Page & Post Styles --- */
+.site-main {
+    padding-top: 60px;
+}
 .page-header { margin-bottom: 40px; border-bottom: 1px solid var(--border-color); padding-bottom: 20px; }
 .entry-title { font-size: 2.8rem; margin-bottom: 20px; line-height: 1.2; }
 .entry-content p { margin-bottom: 1.5em; }
@@ -340,6 +343,33 @@ body.home .homepage-section[style*="background-image"] {
 .professional-page-header .entry-title { font-size: 3.5rem; }
 .professional-page-header .page-subtitle { font-size: 1.3rem; color: var(--text-light); margin-top: -10px; max-width: 700px; margin-left: auto; margin-right: auto; }
 .entry-content-wrapper { max-width: 800px; margin: 0 auto; }
+
+/* --- Contact Page Template --- */
+.contact-layout-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 60px;
+    align-items: flex-start;
+}
+.contact-details-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.contact-detail-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+    font-size: 1.1rem;
+}
+.contact-detail-item .dashicons {
+    color: var(--primary-accent-color);
+}
+.contact-map-section {
+    margin-top: 60px;
+    border: 1px solid var(--border-color);
+}
 
 /* --- Blog & Post Meta --- */
 .entry-meta {
