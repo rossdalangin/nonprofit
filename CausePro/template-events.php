@@ -8,62 +8,56 @@
  */
 
 get_header();
+
+// Determine the current view: 'upcoming' or 'past'
+$current_view = isset( $_GET['view'] ) && $_GET['view'] === 'past' ? 'past' : 'upcoming';
 ?>
 
 <main id="primary" class="site-main">
     <div class="container">
         <header class="page-header">
             <?php the_title( '<h1 class="page-title">', '</h1>' ); ?>
+            <div class="page-subtitle">
+                <?php esc_html_e( 'Join us at our events. Get involved, meet our community, and support our cause.', 'causepro' ); ?>
+            </div>
         </header><!-- .page-header -->
 
         <div class="event-filters">
-            <form method="get" action="<?php echo esc_url( get_permalink() ); ?>">
-                <?php
-                $terms = get_terms( array(
-                    'taxonomy'   => 'event_type',
-                    'hide_empty' => true,
-                ) );
-                if ( ! empty( $terms ) && ! is_wp_error( $terms ) ) {
-                    echo '<select name="event_type_filter" onchange="this.form.submit()">';
-                    echo '<option value="">' . esc_html__( 'All Event Types', 'causepro' ) . '</option>';
-                    $current_filter = isset( $_GET['event_type_filter'] ) ? sanitize_text_field( $_GET['event_type_filter'] ) : '';
-                    foreach ( $terms as $term ) {
-                        echo '<option value="' . esc_attr( $term->slug ) . '"' . selected( $current_filter, $term->slug, false ) . '>' . esc_html( $term->name ) . '</option>';
-                    }
-                    echo '</select>';
-                }
-                ?>
-                <noscript><button type="submit"><?php esc_html_e( 'Filter', 'causepro' ); ?></button></noscript>
-            </form>
+            <!-- View switcher -->
+            <div class="event-view-switcher">
+                <a href="<?php echo esc_url( add_query_arg( 'view', 'upcoming', get_permalink() ) ); ?>" class="<?php echo ( $current_view === 'upcoming' ? 'active' : '' ); ?>"><?php esc_html_e( 'Upcoming Events', 'causepro' ); ?></a>
+                <a href="<?php echo esc_url( add_query_arg( 'view', 'past', get_permalink() ) ); ?>" class="<?php echo ( $current_view === 'past' ? 'active' : '' ); ?>"><?php esc_html_e( 'Past Events', 'causepro' ); ?></a>
+            </div>
         </div>
 
         <?php
         $paged = ( get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1;
         $args = array(
             'post_type'      => 'event',
-            'posts_per_page' => 10,
+            'posts_per_page' => 9,
             'paged'          => $paged,
             'meta_key'       => '_event_date_time',
             'orderby'        => 'meta_value',
-            'order'          => 'ASC',
-            'meta_query'     => array(
-                'relation' => 'AND',
+        );
+
+        if ( $current_view === 'upcoming' ) {
+            $args['order'] = 'ASC';
+            $args['meta_query'] = array(
                 array(
                     'key'     => '_event_date_time',
                     'value'   => date( 'Y-m-d H:i:s' ),
                     'compare' => '>=',
                     'type'    => 'DATETIME',
                 ),
-            ),
-        );
-
-        // Check if a filter is applied
-        if ( ! empty( $_GET['event_type_filter'] ) ) {
-            $args['tax_query'] = array(
+            );
+        } else { // past events
+            $args['order'] = 'DESC';
+            $args['meta_query'] = array(
                 array(
-                    'taxonomy' => 'event_type',
-                    'field'    => 'slug',
-                    'terms'    => sanitize_text_field( $_GET['event_type_filter'] ),
+                    'key'     => '_event_date_time',
+                    'value'   => date( 'Y-m-d H:i:s' ),
+                    'compare' => '<',
+                    'type'    => 'DATETIME',
                 ),
             );
         }
@@ -72,37 +66,33 @@ get_header();
         ?>
 
         <?php if ( $events_query->have_posts() ) : ?>
-            <div class="events-list events-archive-list">
+            <div class="events-grid events-archive-grid">
                 <?php while ( $events_query->have_posts() ) : $events_query->the_post(); ?>
-                    <article id="post-<?php the_ID(); ?>" <?php post_class('event-card'); ?>>
-                        <?php
-                        $event_date_time = get_post_meta( get_the_ID(), '_event_date_time', true );
-                        if ( ! empty( $event_date_time ) ) :
-                            $date = new DateTime( $event_date_time );
-                        ?>
-                        <div class="event-date-box">
-                            <span class="event-month"><?php echo esc_html( $date->format( 'M' ) ); ?></span>
-                            <span class="event-day"><?php echo esc_html( $date->format( 'd' ) ); ?></span>
-                        </div>
+                     <article id="post-<?php the_ID(); ?>" <?php post_class('event-item'); ?>>
+                        <?php if ( has_post_thumbnail() ) : ?>
+                            <div class="event-thumbnail">
+                                <a href="<?php the_permalink(); ?>">
+                                    <?php the_post_thumbnail( 'medium_large' ); ?>
+                                </a>
+                            </div>
                         <?php endif; ?>
-
-                        <div class="event-card-content">
+                        <div class="event-item-content">
                             <header class="entry-header">
-                                <?php the_title( '<h2 class="entry-title"><a href="' . esc_url( get_permalink() ) . '" rel="bookmark">', '</a></h2>' ); ?>
-                                <div class="event-meta">
-                                    <?php if ( ! empty( $event_date_time ) ) : ?>
-                                        <span class="event-time"><?php echo esc_html( $date->format( 'g:i a' ) ); ?></span>
-                                    <?php endif; ?>
-                                    <?php
-                                    $location = get_post_meta( get_the_ID(), '_event_location', true );
-                                    if ( ! empty( $location ) ) : ?>
-                                        <span class="event-location"><?php echo esc_html( $location ); ?></span>
-                                    <?php endif; ?>
-                                </div>
+                                <?php the_title( '<h3 class="entry-title"><a href="' . esc_url( get_permalink() ) . '" rel="bookmark">', '</a></h3>' ); ?>
+                                <?php
+                                $event_date_time = get_post_meta( get_the_ID(), '_event_date_time', true );
+                                if ( ! empty( $event_date_time ) ) {
+                                    $date = new DateTime( $event_date_time );
+                                    echo '<p class="event-date">' . esc_html( $date->format( 'F j, Y \a\t g:i a' ) ) . '</p>';
+                                }
+                                ?>
                             </header>
                             <div class="entry-summary">
                                 <?php the_excerpt(); ?>
                             </div>
+                             <footer class="entry-footer">
+                                <a href="<?php the_permalink(); ?>" class="button"><?php esc_html_e( 'View Event', 'causepro' ); ?></a>
+                            </footer>
                         </div>
                     </article>
                 <?php endwhile; ?>
@@ -116,13 +106,25 @@ get_header();
                 'format'  => '?paged=%#%',
                 'current' => max( 1, get_query_var('paged') ),
                 'total'   => $events_query->max_num_pages,
-                'add_args' => array( 'event_type_filter' => ( ! empty( $_GET['event_type_filter'] ) ? sanitize_text_field( $_GET['event_type_filter'] ) : '' ) ),
+                'add_args' => array( 'view' => $current_view ),
+                'prev_text' => __('&laquo; Previous'),
+                'next_text' => __('Next &raquo;'),
             ) );
             ?>
 
             <?php wp_reset_postdata(); ?>
         <?php else : ?>
-            <p><?php esc_html_e( 'Sorry, no upcoming events found matching your criteria.', 'causepro' ); ?></p>
+            <div class="no-posts-found">
+                <p>
+                    <?php
+                    if ($current_view === 'upcoming') {
+                        esc_html_e( 'There are no upcoming events at the moment. Please check back soon!', 'causepro' );
+                    } else {
+                        esc_html_e( 'There are no past events to display.', 'causepro' );
+                    }
+                    ?>
+                </p>
+            </div>
         <?php endif; ?>
     </div><!-- .container -->
 </main><!-- #main -->

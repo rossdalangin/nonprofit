@@ -379,3 +379,51 @@ body.home .homepage-section[style*="background-image"] {
     color: var(--text-medium);
     margin-bottom: 2rem;
 }
+
+/* Events Archive */
+.event-filters {
+    margin-bottom: 2.5rem;
+    display: flex;
+    justify-content: center;
+}
+.event-view-switcher {
+    display: inline-flex;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-md);
+    overflow: hidden;
+}
+.event-view-switcher a {
+    padding: 12px 24px;
+    font-weight: 600;
+    color: var(--text-medium);
+    background-color: var(--background-white);
+    border-left: 1px solid var(--border-color);
+    transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+.event-view-switcher a:first-child {
+    border-left: none;
+}
+.event-view-switcher a.active,
+.event-view-switcher a:hover {
+    background-color: var(--primary-color);
+    color: var(--background-white);
+}
+.events-archive-grid {
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2.5rem;
+}
+.event-item .event-item-content {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+.event-item .event-date {
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+.event-item .entry-footer {
+    margin-top: auto;
+    padding-top: 1rem;
+}
