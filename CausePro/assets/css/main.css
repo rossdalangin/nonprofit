@@ -341,6 +341,69 @@ body.home .homepage-section[style*="background-image"] {
     padding-top: 1rem;
 }
 
+/* --- V2 Single Post/Page Styling --- */
+
+/* Single Cause */
+.cause-single-header {
+    padding: 6rem 0;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    color: var(--white);
+    text-align: center;
+}
+.cause-single-header .entry-title {
+    font-size: 4rem;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    position: relative;
+    z-index: 2;
+}
+.cause-single-content-area {
+    padding: 4rem 0;
+}
+.cause-single-layout-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 4rem;
+}
+.cause-sidebar-widget {
+    background-color: var(--background-light-gray);
+    padding: 2rem;
+    border-radius: var(--border-radius-lg);
+    position: sticky;
+    top: 120px; /* Adjust based on header height */
+}
+.cause-progress-widget {
+    margin-bottom: 2rem;
+}
+.cause-progress-widget .progress-bar-labels {
+    font-size: 1rem;
+}
+.cause-progress-widget .amount-raised {
+    font-size: 1.5rem;
+}
+.donate-button-large {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 18px;
+    font-size: 1.2rem;
+}
+.social-share {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border-color);
+    text-align: center;
+}
+.social-share-title {
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+.social-share-links a {
+    margin: 0 10px;
+    font-size: 1.5rem;
+}
+
 /* Blog Archive */
 .category-filters {
     display: flex;
