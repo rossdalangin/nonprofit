@@ -341,6 +341,47 @@ body.home .homepage-section[style*="background-image"] {
     padding-top: 1rem;
 }
 
+/* Blog Archive */
+.category-filters {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 2.5rem;
+    flex-wrap: wrap;
+}
+.category-filters a {
+    padding: 10px 20px;
+    border-radius: 100px;
+    font-weight: 600;
+    color: var(--text-medium);
+    background-color: var(--background-light-gray);
+    transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+.category-filters a.active,
+.category-filters a:hover {
+    background-color: var(--primary-color);
+    color: var(--background-white);
+}
+.blog-grid {
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2.5rem;
+}
+.blog-item .blog-item-content {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+.blog-item .entry-meta {
+    color: var(--text-medium);
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+}
+.blog-item .entry-footer {
+    margin-top: auto;
+    padding-top: 1rem;
+}
+
 /* Pagination */
 .pagination {
     text-align: center;
